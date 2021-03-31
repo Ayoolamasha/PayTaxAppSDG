@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">PayTaxAppSDG</string>
+    <string name="image_desc">Image</string>
+    <string name="tax_id">Tax ID</string>
+    <string name="password">Password</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account_yet">Don\'t have an account yet ?</string>
+    <string name="register">Register</string>
+    <string name="back">Back</string>
+    <string name="register_as">Register As</string>
+    <string name="company">Company</string>
+    <string name="individual">Individual</string>
+    <string name="next">Next</string>
+    <string name="already_a_user">Already a user?</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="state">State</string>
+    <string name="address">Address</string>
+    <string name="create_account">Create Account</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="name">Name</string>
+    <string name="paid">Paid</string>
+    <string name="outstanding">Outstanding</string>
+    <string name="income">Income</string>
+    <string name="total_tax">Total Tax</string>
+    <string name="make_payment">Make Payment</string>
+    <string name="select_tax">Select Tax</string>
+    <string name="personal_income_tax_pit">Personal Income Tax (PIT)</string>
+    <string name="amount">Amount</string>
+    <string name="payable_amount">Payable Amount</string>
+    <string name="tax_due_date">Tax Due Date</string>
+    <string name="see_history">See History</string>
+    <string name="profile">Profile</string>
 </resources>
