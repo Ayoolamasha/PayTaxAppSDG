@@ -24,13 +24,7 @@ class RegisterAsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.register_fragment, container, false)
 
-        view.findViewById<Button>(R.id.nextButton).setOnClickListener {
-            view.findNavController().navigate(R.id.action_registerAsFragment_to_signUpFragment)
-        }
 
-        view.findViewById<Button>(R.id.backToLogin).setOnClickListener {
-            view.findNavController().navigate(R.id.action_registerAsFragment_to_loginFragment)
-        }
 
 
         return view

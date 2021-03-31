@@ -1,4 +1,9 @@
 package com.ayoolamasha.paytaxappsdg.SignUp
 
-class SignUpError {
-}
+import com.google.gson.annotations.SerializedName
+
+data class SignUpError(
+    @SerializedName("status")
+    val status: Boolean,
+    val signUpErrorPojo: SignUpErrorPojo
+)

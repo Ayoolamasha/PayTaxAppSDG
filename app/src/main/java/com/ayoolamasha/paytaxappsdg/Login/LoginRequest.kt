@@ -2,9 +2,9 @@ package com.ayoolamasha.paytaxappsdg.Login
 
 import com.google.gson.annotations.SerializedName
 
-data class LoginPojoClass(
+data class LoginRequest(
 
-        @SerializedName("taxID")
+        @SerializedName("taxPayerId")
         val taxID: String,
 
         @SerializedName("password")

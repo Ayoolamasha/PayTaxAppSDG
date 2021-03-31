@@ -34,4 +34,13 @@
     <string name="tax_due_date">Tax Due Date</string>
     <string name="see_history">See History</string>
     <string name="profile">Profile</string>
+    <string name="email">Email</string>
+    <string name="email_dummy">Email@mail.com</string>
+    <string name="notification">Notification</string>
+    <string name="payment_was_declined">Payment Was Declined</string>
+    <string name="see_invoice">See Invoice</string>
+    <string name="payment_was_accepted">Payment Was Accepted</string>
+    <string name="ben_able">Ben Able</string>
+    <string name="_2544rrr0f2as">gL3qq9qXLh</string>
+    <string name="_100_000">100,000</string>
 </resources>

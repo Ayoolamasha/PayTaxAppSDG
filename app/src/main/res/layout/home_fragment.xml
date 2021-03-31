@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/layout_margin_top_50">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".Home.HomeFragment">
-
-
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBarTop"
@@ -91,7 +84,7 @@
             android:id="@+id/dynamicName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Ben Able"
+            android:text="@string/ben_able"
             android:textSize="16sp"
             app:layout_constraintVertical_bias="0.01"
             app:layout_constraintHorizontal_bias="0.1"
@@ -130,7 +123,7 @@
             android:id="@+id/dynamicTaxID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="2544rrr0f2as"
+            android:text="@string/_2544rrr0f2as"
             android:textSize="16sp"
             app:layout_constraintVertical_bias="0.01"
             app:layout_constraintHorizontal_bias="0.75"
@@ -248,10 +241,10 @@
             android:id="@+id/dynamicIncome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="100,000"
+            android:text="@string/_100_000"
             android:textSize="16sp"
             app:layout_constraintVertical_bias="0.01"
-            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintStart_toEndOf="@id/currencyID1"
             app:layout_constraintTop_toBottomOf="@id/staticIncome"
             app:layout_constraintEnd_toEndOf="parent"
@@ -437,12 +430,12 @@
             app:layout_constraintTop_toBottomOf="@id/staticAmount"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <Spinner
+            <TextView
                 android:id="@+id/taxesSpinner2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:prompt="@string/payable_amount"
-                android:tooltipText="@string/payable_amount"
+                android:hint="@string/payable_amount"
+                android:gravity="center_horizontal"
                 />
         </LinearLayout>
 
@@ -526,4 +519,3 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
