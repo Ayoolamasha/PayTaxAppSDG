@@ -1,14 +1,20 @@
 package com.ayoolamasha.paytaxappsdg.SignUp
 
+import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiResult
 import com.ayoolamasha.paytaxappsdg.R
 import com.ayoolamasha.paytaxappsdg.Utils.ViewModelFactory
@@ -23,12 +29,17 @@ import timber.log.Timber
 
 class SignUpFragment : Fragment() {
 
-//    private val signUpViewModel:SignUpViewModel by lazy{
-//        val activity = requireActivity()
-//        ViewModelProvider(activity).get(SignUpViewModel::class.java)
-//    }
-
     private lateinit var signUpViewModel:SignUpViewModel
+
+    private lateinit var dialogBuilder: AlertDialog.Builder
+    private lateinit var dialog: AlertDialog
+
+    private lateinit var clipboardManager: ClipboardManager
+    //private lateinit var clipData: ClipData
+
+    private lateinit var taxId: TextView
+    private lateinit var copy: TextView
+    private lateinit var login: TextView
 
 
     companion object {
@@ -44,7 +55,7 @@ class SignUpFragment : Fragment() {
     private lateinit var phone: TextInputEditText
     private lateinit var email: TextInputEditText
     private lateinit var password: TextInputEditText
-    private lateinit var createButton: Button
+    private lateinit var createButton: CircularProgressButton
 
 
 
@@ -66,6 +77,8 @@ class SignUpFragment : Fragment() {
 
         view.findViewById<Button>(R.id.closeButton).setOnClickListener {
             view.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+
+
         }
 
         view.findViewById<Button>(R.id.backToLoginUp).setOnClickListener {
@@ -74,6 +87,8 @@ class SignUpFragment : Fragment() {
 
         createButton.setOnClickListener {
             signUpRequest()
+            createButton.startAnimation()
+
         }
 
 
@@ -82,12 +97,62 @@ class SignUpFragment : Fragment() {
                 coroutineScope.launch {
                     when (type) {
                         is ApiResult.Success -> {
+                            createButton.dispose()
                             val success = type.response as SignUpResponse
                             Timber.tag("success").d(success.signUpResponseData?.taxPayerId)
-                            Toast.makeText(activity, success.signUpResponseData?.taxPayerId, Toast.LENGTH_LONG).show()
+                            Timber.tag("success").d(success.accessToken)
+                            //Timber.tag("success").d(success.status)
+
+                            coroutineScope.launch(Dispatchers.Main) {
+                                dialogBuilder = AlertDialog.Builder(activity)
+
+                                val view1: View? = layoutInflater.inflate(
+                                    R.layout.layout_sign_up_dialog,
+                                    container,
+                                    false
+                                )
+
+                                if (view1 != null) {
+                                    taxId = view1.findViewById(R.id.dynamicPayerID)
+                                    copy = view1.findViewById(R.id.copyStatic)
+                                    login = view1.findViewById(R.id.navToLogin)
+
+                                }else{
+                                    Toast.makeText(
+                                        activity,
+                                        success.signUpResponseData?.taxPayerId,
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+
+                                dialogBuilder.setView(view1);
+                                dialogBuilder.setCancelable(false);
+                                dialog = dialogBuilder.create();
+                                dialog.show()
+
+                                taxId.text = success.signUpResponseData?.taxPayerId
+
+                                copy.setOnClickListener {
+                                    val taxCode: String = success.signUpResponseData?.taxPayerId?: return@setOnClickListener
+                                    val clipData:ClipData = ClipData.newPlainText("text", taxCode)
+                                    clipboardManager.setPrimaryClip(clipData)
+
+                                    login.visibility=View.VISIBLE
+                                }
+
+                                login.setOnClickListener {
+                                    view1?.findNavController()?.navigate(R.id.action_signUpFragment_to_loginFragment)
+                                    dialog.dismiss()
+
+                                }
+
+
+
+                            }
                             //view.findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                         }
                         is ApiResult.NetworkError -> {
+                            createButton.dispose()
                             Snackbar.make(
                                 view,
                                 "Check your Network Connection",
@@ -95,6 +160,7 @@ class SignUpFragment : Fragment() {
                             ).setAnimationMode(Snackbar.ANIMATION_MODE_FADE).show()
                         }
                         is ApiResult.Failure -> {
+                            createButton.dispose()
                             val error: SignUpErrorPojo = type as SignUpErrorPojo
                             Timber.tag("Failure").d(error.message)
                             Snackbar.make(
@@ -104,6 +170,7 @@ class SignUpFragment : Fragment() {
                             ).setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
                         }
                         is ApiResult.Exception -> {
+                            createButton.dispose()
                             Timber.tag("Exception").d(type.t)
                             type.t.message?.let {
                                 Snackbar.make(view, it, Snackbar.LENGTH_SHORT)
@@ -134,7 +201,7 @@ class SignUpFragment : Fragment() {
         email = view.findViewById(R.id.inputEmail)
         password = view.findViewById(R.id.inputPassword)
         createButton = view.findViewById(R.id.createAccount)
-
+        clipboardManager = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 
     private fun signUpRequest(){

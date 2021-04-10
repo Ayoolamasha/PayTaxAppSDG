@@ -4,9 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class SignUpErrorPojo(
     @SerializedName("msg")
-    val message: String,
+    val message: String?,
     @SerializedName("param")
-    val param: String,
+    val param: String?,
     @SerializedName("location")
-    val location: String
+    val location: String?,
+    @SerializedName("error")
+    val error: String?
 )

@@ -1,12 +1,11 @@
 package com.ayoolamasha.paytaxappsdg.Login
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiResult
 import com.ayoolamasha.paytaxappsdg.ApiServices.ApiServicesInterface
+import com.ayoolamasha.paytaxappsdg.UserData.UserDataPojo
+import com.ayoolamasha.paytaxappsdg.UserData.UserDataRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -31,6 +30,15 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
 
     private lateinit var loginRepository: LoginRepository
+   // private lateinit var userDataRepository: UserDataRepository
+
+    //val allUserDataPojo: LiveData<List<UserDataPojo>> = repository.allUserData.asLiveData()
+
+//    fun saveUserDataViewModel(userDataPojo: UserDataPojo) = viewModelScope.launch {
+//        repository.saveUserDataRepository(userDataPojo)
+//
+//    }
+
 
     var mLiveLoginResponse: LiveData<ApiResult<Any>>
     private var _mMutableLoginResponse: MutableLiveData<ApiResult<Any>>
@@ -39,7 +47,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         loginRepository = LoginRepository.getInstance(application)
         _mMutableLoginResponse = MutableLiveData()
         mLiveLoginResponse = _mMutableLoginResponse
+        //userDataRepository = UserDataRepository()
+
     }
+
 
     fun userLogin(userTaxId: String, userPassword:String){
         viewModelScope.launch {
@@ -48,6 +59,22 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             _mMutableLoginResponse.postValue(loginResult)
         }
     }
+
+//    fun saveUserViewModel(userDataPojo: UserDataPojo){
+//        userDataRepository.saveUserDataRepository(userDataPojo)
+//    }
+
+//
+//        class LoginViewModelFactory(private val application: UserDataRepository, private val repository: UserDataRepository) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+//                @Suppress("UNCHECKED_CAST")
+//                return LoginViewModel(application, repository) as T
+//            }
+//            throw IllegalArgumentException("Unknown ViewModel class")
+//        }
+//}
+
 
     /**
      * Cancel all coroutines when the ViewModel is cleared

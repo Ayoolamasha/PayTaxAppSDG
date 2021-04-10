@@ -6,9 +6,10 @@ data class SignUpResponse(
     @SerializedName("status")
     val status: Boolean,
 
+    @SerializedName("data")
     val signUpResponseData: SignUpResponseData?,
 
-    @SerializedName("accessToken")
+    @SerializedName("accesstoken")
     val accessToken: String
 
 )

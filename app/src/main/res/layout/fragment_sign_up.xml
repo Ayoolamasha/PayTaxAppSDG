@@ -208,7 +208,7 @@
 
         </LinearLayout>
 
-        <Button
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/createAccount"
             android:layout_width="@dimen/button_width"
             android:layout_height="@dimen/button_height"

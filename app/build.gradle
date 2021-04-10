@@ -74,6 +74,9 @@ dependencies {
     implementation 'com.github.blackfizz:eazegraph:1.2.5l@aar'
     implementation 'com.nineoldandroids:library:2.4.0'
 
+    // button animation
+    implementation 'br.com.simplepass:loading-button-android:2.2.0'
+
     // timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
 

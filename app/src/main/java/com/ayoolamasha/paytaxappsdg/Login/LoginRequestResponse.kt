@@ -7,9 +7,10 @@ data class LoginRequestResponse(
     @SerializedName("status")
     val status: Boolean,
 
+    @SerializedName("data")
     val loginResponseData: LoginResponseData,
 
-    @SerializedName("accessToken")
+    @SerializedName("accesstoken")
     val accessToken: String
 
 )
