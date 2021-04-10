@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/layout_margin_top_50">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".Home.HomeFragment">
-
-
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBarTop"
@@ -91,8 +84,10 @@
             android:id="@+id/dynamicName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Ben Able"
+            android:text="@string/ben_able"
             android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
             app:layout_constraintVertical_bias="0.01"
             app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintStart_toEndOf="@id/dashBoardImage"
@@ -130,10 +125,12 @@
             android:id="@+id/dynamicTaxID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="2544rrr0f2as"
+            android:text="@string/_2544rrr0f2as"
             android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
             app:layout_constraintVertical_bias="0.01"
-            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintHorizontal_bias="0.7"
             app:layout_constraintStart_toEndOf="@id/dynamicName"
             app:layout_constraintTop_toBottomOf="@id/staticTaxID"
             app:layout_constraintEnd_toEndOf="parent"
@@ -151,208 +148,208 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <!-- CHARTS DESIGN -->
+<!--        &lt;!&ndash; CHARTS DESIGN &ndash;&gt;-->
 
-        <org.eazegraph.lib.charts.PieChart
-            android:id="@+id/allTaxesChart"
-            android:layout_width="@dimen/chart_width"
-            android:layout_height="@dimen/chart_height"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintVertical_bias="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dashBoardImage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-        <View
-            android:id="@+id/view3"
-            android:layout_width="@dimen/round_ish_view_width"
-            android:layout_height="@dimen/round_ish_view_width"
-            android:background="@color/iconColor"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintVertical_bias="0.06"
-            app:layout_constraintStart_toEndOf="@id/allTaxesChart"
-            app:layout_constraintTop_toBottomOf="@id/view1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+<!--        <org.eazegraph.lib.charts.PieChart-->
+<!--            android:id="@+id/allTaxesChart"-->
+<!--            android:layout_width="@dimen/chart_width"-->
+<!--            android:layout_height="@dimen/chart_height"-->
+<!--            app:layout_constraintHorizontal_bias="0.1"-->
+<!--            app:layout_constraintVertical_bias="0.05"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/dashBoardImage"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
 
 
-        <View
-            android:id="@+id/view4"
-            android:layout_width="@dimen/round_ish_view_width"
-            android:layout_height="@dimen/round_ish_view_width"
-            android:background="@color/black_shade"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintVertical_bias="0.02"
-            app:layout_constraintStart_toEndOf="@id/allTaxesChart"
-            app:layout_constraintTop_toBottomOf="@id/view3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-
-        <TextView
-            android:id="@+id/staticPaid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/paid"
-            app:layout_constraintVertical_bias="0.055"
-            app:layout_constraintHorizontal_bias="0.05"
-            style="@style/TopTextViewDesign"
-            app:layout_constraintStart_toEndOf="@id/view3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view1"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <TextView
-            android:id="@+id/staticOutstanding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/outstanding"
-            app:layout_constraintVertical_bias="0.013"
-            app:layout_constraintHorizontal_bias="0.05"
-            style="@style/TopTextViewDesign"
-            app:layout_constraintStart_toEndOf="@id/view4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/staticPaid"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <!-- BOTTOM PART -->
-        <TextView
-            android:id="@+id/staticIncome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/income"
-            app:layout_constraintVertical_bias="0.04"
-            app:layout_constraintHorizontal_bias="0.6"
-            style="@style/TopTextViewDesign"
-            app:layout_constraintStart_toEndOf="@id/staticPaid"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view2"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <ImageView
-            android:id="@+id/currencyID1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/image_desc"
-            android:src="@drawable/group_1298"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/staticPaid"
-            app:layout_constraintTop_toBottomOf="@id/staticIncome"
-            app:layout_constraintVertical_bias="0.01" />
-
-        <TextView
-            android:id="@+id/dynamicIncome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="100,000"
-            android:textSize="16sp"
-            app:layout_constraintVertical_bias="0.01"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toEndOf="@id/currencyID1"
-            app:layout_constraintTop_toBottomOf="@id/staticIncome"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+<!--        <View-->
+<!--            android:id="@+id/view3"-->
+<!--            android:layout_width="@dimen/round_ish_view_width"-->
+<!--            android:layout_height="@dimen/round_ish_view_width"-->
+<!--            android:background="@color/iconColor"-->
+<!--            app:layout_constraintHorizontal_bias="0.05"-->
+<!--            app:layout_constraintVertical_bias="0.06"-->
+<!--            app:layout_constraintStart_toEndOf="@id/allTaxesChart"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/view1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            />-->
 
 
-        <View
-            android:id="@+id/view5"
-            android:layout_width="@dimen/views_width"
-            android:layout_height="@dimen/views_height"
-            android:background="@color/iconColor"
-            app:layout_constraintHorizontal_bias="0.6"
-            app:layout_constraintVertical_bias="0.01"
-            app:layout_constraintStart_toEndOf="@id/staticOutstanding"
-            app:layout_constraintTop_toBottomOf="@id/currencyID1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+<!--        <View-->
+<!--            android:id="@+id/view4"-->
+<!--            android:layout_width="@dimen/round_ish_view_width"-->
+<!--            android:layout_height="@dimen/round_ish_view_width"-->
+<!--            android:background="@color/black_shade"-->
+<!--            app:layout_constraintHorizontal_bias="0.05"-->
+<!--            app:layout_constraintVertical_bias="0.02"-->
+<!--            app:layout_constraintStart_toEndOf="@id/allTaxesChart"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/view3"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            />-->
 
-        <TextView
-            android:id="@+id/staticOutstanding2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/outstanding"
-            android:textSize="@dimen/textSize_15sp"
-            android:textColor="@color/black"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintVertical_bias="0.05"
-            app:layout_constraintTop_toBottomOf="@id/allTaxesChart"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+<!--        <TextView-->
+<!--            android:id="@+id/staticPaid"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/paid"-->
+<!--            app:layout_constraintVertical_bias="0.055"-->
+<!--            app:layout_constraintHorizontal_bias="0.05"-->
+<!--            style="@style/TopTextViewDesign"-->
+<!--            app:layout_constraintStart_toEndOf="@id/view3"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/view1"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/staticOutstanding"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/outstanding"-->
+<!--            app:layout_constraintVertical_bias="0.013"-->
+<!--            app:layout_constraintHorizontal_bias="0.05"-->
+<!--            style="@style/TopTextViewDesign"-->
+<!--            app:layout_constraintStart_toEndOf="@id/view4"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/staticPaid"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+<!--        &lt;!&ndash; BOTTOM PART &ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:id="@+id/staticIncome"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/income"-->
+<!--            app:layout_constraintVertical_bias="0.04"-->
+<!--            app:layout_constraintHorizontal_bias="0.6"-->
+<!--            style="@style/TopTextViewDesign"-->
+<!--            app:layout_constraintStart_toEndOf="@id/staticPaid"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/view2"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/currencyID1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:contentDescription="@string/image_desc"-->
+<!--            android:src="@drawable/group_1298"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/staticPaid"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/staticIncome"-->
+<!--            app:layout_constraintVertical_bias="0.01" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/dynamicIncome"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/_100_000"-->
+<!--            android:textSize="16sp"-->
+<!--            app:layout_constraintVertical_bias="0.01"-->
+<!--            app:layout_constraintHorizontal_bias="0.1"-->
+<!--            app:layout_constraintStart_toEndOf="@id/currencyID1"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/staticIncome"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
 
 
-        <TextView
-            android:id="@+id/staticTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/total_tax"
-            android:textSize="@dimen/textSize_15sp"
-            android:textColor="@color/black"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintVertical_bias="0.02"
-            app:layout_constraintTop_toBottomOf="@id/staticOutstanding2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+<!--        <View-->
+<!--            android:id="@+id/view5"-->
+<!--            android:layout_width="@dimen/views_width"-->
+<!--            android:layout_height="@dimen/views_height"-->
+<!--            android:background="@color/iconColor"-->
+<!--            app:layout_constraintHorizontal_bias="0.6"-->
+<!--            app:layout_constraintVertical_bias="0.01"-->
+<!--            app:layout_constraintStart_toEndOf="@id/staticOutstanding"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/currencyID1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/staticOutstanding2"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/outstanding"-->
+<!--            android:textSize="@dimen/textSize_15sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            app:layout_constraintHorizontal_bias="0.1"-->
+<!--            app:layout_constraintVertical_bias="0.05"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/allTaxesChart"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            />-->
 
 
-        <ImageView
-            android:id="@+id/currencyID2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/group_1297"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintVertical_bias="0.08"
-            app:layout_constraintStart_toEndOf="@id/staticOutstanding2"
-            app:layout_constraintTop_toBottomOf="@id/view4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="@string/image_desc"/>
+<!--        <TextView-->
+<!--            android:id="@+id/staticTotal"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/total_tax"-->
+<!--            android:textSize="@dimen/textSize_15sp"-->
+<!--            android:textColor="@color/black"-->
+<!--            app:layout_constraintHorizontal_bias="0.1"-->
+<!--            app:layout_constraintVertical_bias="0.02"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/staticOutstanding2"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            />-->
 
-        <ImageView
-            android:id="@+id/currencyID3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/group_1297"
-            app:layout_constraintHorizontal_bias="0.15"
-            app:layout_constraintVertical_bias="0.03"
-            app:layout_constraintStart_toEndOf="@id/staticTotal"
-            app:layout_constraintTop_toBottomOf="@id/currencyID2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="@string/image_desc"/>
 
-        <TextView
-            android:id="@+id/outstandingFig"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="5,000"
-            style="@style/TopTextViewDesign"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintVertical_bias="0.08"
-            app:layout_constraintStart_toEndOf="@id/currencyID2"
-            app:layout_constraintTop_toBottomOf="@id/view5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+<!--        <ImageView-->
+<!--            android:id="@+id/currencyID2"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/group_1297"-->
+<!--            app:layout_constraintHorizontal_bias="0.1"-->
+<!--            app:layout_constraintVertical_bias="0.08"-->
+<!--            app:layout_constraintStart_toEndOf="@id/staticOutstanding2"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/view4"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            android:contentDescription="@string/image_desc"/>-->
 
-        <TextView
-            android:id="@+id/totalTaxFig"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="10,000"
-            style="@style/TopTextViewDesign"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintVertical_bias="0.05"
-            app:layout_constraintStart_toEndOf="@id/currencyID3"
-            app:layout_constraintTop_toBottomOf="@id/outstandingFig"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+<!--        <ImageView-->
+<!--            android:id="@+id/currencyID3"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/group_1297"-->
+<!--            app:layout_constraintHorizontal_bias="0.15"-->
+<!--            app:layout_constraintVertical_bias="0.03"-->
+<!--            app:layout_constraintStart_toEndOf="@id/staticTotal"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/currencyID2"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            android:contentDescription="@string/image_desc"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/outstandingFig"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            tools:text="5,000"-->
+<!--            style="@style/TopTextViewDesign"-->
+<!--            app:layout_constraintHorizontal_bias="0.8"-->
+<!--            app:layout_constraintVertical_bias="0.08"-->
+<!--            app:layout_constraintStart_toEndOf="@id/currencyID2"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/view5"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/totalTaxFig"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            tools:text="10,000"-->
+<!--            style="@style/TopTextViewDesign"-->
+<!--            app:layout_constraintHorizontal_bias="0.8"-->
+<!--            app:layout_constraintVertical_bias="0.05"-->
+<!--            app:layout_constraintStart_toEndOf="@id/currencyID3"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/outstandingFig"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
 
 
         <View
@@ -362,7 +359,7 @@
             android:background="@color/transparent_black"
             app:layout_constraintVertical_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/staticTotal"
+            app:layout_constraintTop_toBottomOf="@id/view1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -427,24 +424,79 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <LinearLayout
-            android:id="@+id/spinnerLinear2"
-            android:layout_width="@dimen/edit_text_width2"
-            android:layout_height="@dimen/edit_text_height2"
-            app:layout_constraintVertical_bias="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/staticAmount"
-            app:layout_constraintBottom_toBottomOf="parent">
 
-            <Spinner
-                android:id="@+id/taxesSpinner2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:prompt="@string/payable_amount"
-                android:tooltipText="@string/payable_amount"
-                />
-        </LinearLayout>
+<!--          <com.google.android.material.textfield.TextInputLayout-->
+<!--              android:id="@+id/staticIncome"-->
+<!--              android:layout_width="match_parent"-->
+<!--              android:layout_height="wrap_content"-->
+<!--              android:hint="@string/income"-->
+<!--              style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--              app:startIconDrawable="@drawable/ic_money"-->
+<!--              app:endIconMode="clear_text"-->
+<!--              app:endIconTint="@color/iconColor"-->
+<!--              app:boxStrokeColor="@color/iconColor"-->
+<!--              >-->
+
+<!--              <com.google.android.material.textfield.TextInputEditText-->
+<!--                  android:id="@+id/dynamicIncome"-->
+<!--                  android:layout_width="match_parent"-->
+<!--                  android:layout_height="match_parent"-->
+<!--                  android:inputType="number"/>-->
+<!--          </com.google.android.material.textfield.TextInputLayout>-->
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/staticIncome"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="@string/income"
+                app:hintTextColor="@color/black"
+                app:boxStrokeColor="@color/iconColor"
+                app:boxStrokeWidthFocused="2dp"
+                app:startIconDrawable="@drawable/ic_money"
+                app:startIconTint="@color/iconColor"
+                app:endIconTint="@color/iconColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/staticAmount"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dynamicIncome"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+        android:id="@+id/calaulateTax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_button_brown"
+        android:text="@string/calculate_tax_payable"
+        android:textColor="@color/brown_text_color"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/staticIncome"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/calculateLoading"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="invisible"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/calaulateTax"
+        app:layout_constraintTop_toBottomOf="@id/staticIncome"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/staticPayable"
@@ -453,7 +505,7 @@
             android:text="@string/payable_amount"
             app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintVertical_bias="0.1"
-            app:layout_constraintTop_toBottomOf="@id/spinnerLinear2"
+            app:layout_constraintTop_toBottomOf="@id/calaulateTax"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -466,34 +518,8 @@
             style="@style/TopTextViewDesign"
             app:layout_constraintHorizontal_bias="0.8"
             app:layout_constraintVertical_bias="0.1"
-            app:layout_constraintTop_toBottomOf="@id/spinnerLinear2"
+            app:layout_constraintTop_toBottomOf="@id/calaulateTax"
             app:layout_constraintStart_toEndOf="@id/staticPayable"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <TextView
-            android:id="@+id/staticTaxDueDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tax_due_date"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintVertical_bias="0.1"
-            app:layout_constraintTop_toBottomOf="@id/staticPayable"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <TextView
-            android:id="@+id/dynamicDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Monday 5/01/20201"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintVertical_bias="0.1"
-            app:layout_constraintTop_toBottomOf="@id/dynamicPayableAmount"
-            app:layout_constraintStart_toEndOf="@id/staticTaxDueDate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -504,10 +530,11 @@
             android:layout_height="@dimen/button_height_make_payment"
             android:background="@color/brown_button_color"
             android:text="@string/make_payment"
+            android:visibility="invisible"
             android:textColor="@color/brown_text_color"
             app:layout_constraintVertical_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/staticTaxDueDate"
+            app:layout_constraintTop_toBottomOf="@id/staticPayable"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -526,4 +553,3 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>

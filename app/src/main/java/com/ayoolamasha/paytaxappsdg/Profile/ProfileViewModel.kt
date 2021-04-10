@@ -1,4 +1,4 @@
-package com.ayoolamasha.paytaxappsdg
+package com.ayoolamasha.paytaxappsdg.Profile
 
 import androidx.lifecycle.ViewModel
 

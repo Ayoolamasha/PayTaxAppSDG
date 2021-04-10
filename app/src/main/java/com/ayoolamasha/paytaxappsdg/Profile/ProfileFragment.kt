@@ -1,4 +1,4 @@
-package com.ayoolamasha.paytaxappsdg
+package com.ayoolamasha.paytaxappsdg.Profile
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ayoolamasha.paytaxappsdg.R
 
 class ProfileFragment : Fragment() {
 
