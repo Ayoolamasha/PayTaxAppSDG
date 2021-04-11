@@ -40,5 +40,17 @@
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_makePayment"
+            app:destination="@id/makePayment" />
+    </fragment>
+    <fragment
+        android:id="@+id/makePayment"
+        android:name="com.ayoolamasha.paytaxappsdg.Payment.MakePaymentFragment"
+        android:label="MakePayment"
+        tools:layout="@layout/make_payment_fragment">
+        <action
+            android:id="@+id/action_makePayment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

@@ -2,9 +2,7 @@ package com.ayoolamasha.paytaxappsdg.ApiServices
 
 import com.ayoolamasha.paytaxappsdg.Login.LoginRequest
 import com.ayoolamasha.paytaxappsdg.Login.LoginRequestResponse
-import com.ayoolamasha.paytaxappsdg.Models.CalculateTaxRequest
-import com.ayoolamasha.paytaxappsdg.Models.CalculateTaxResponse
-import com.ayoolamasha.paytaxappsdg.Models.GetDataTypesResponse
+import com.ayoolamasha.paytaxappsdg.Models.*
 import com.ayoolamasha.paytaxappsdg.SignUp.SignUpRequest
 import com.ayoolamasha.paytaxappsdg.SignUp.SignUpResponse
 import retrofit2.Response
@@ -25,5 +23,8 @@ interface ApiServicesInterface {
 
     @POST("/api/v2/payments/payment_income_tax")
     suspend fun calculateTaxTypes(@Body calculateTaxRequest: CalculateTaxRequest): Response<CalculateTaxResponse>
+
+    @POST("/api/v2/gateways/pay")
+    suspend fun makePaymentService(@Header("Authorization") accessToken:String,  @Body paymentRequest: PaymentRequest): Response<PaymentResponse>
 
 }
