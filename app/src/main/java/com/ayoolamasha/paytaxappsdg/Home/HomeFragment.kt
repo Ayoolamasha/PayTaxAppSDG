@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiResult
 import com.ayoolamasha.paytaxappsdg.BaseApplication
@@ -59,6 +61,7 @@ class HomeFragment : Fragment() {
     lateinit var fullName:String
     lateinit var accessToken:String
     lateinit var taxID: String
+    lateinit var userEmail: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +73,8 @@ class HomeFragment : Fragment() {
         fullName = arguments?.getString("name").toString()
         accessToken = arguments?.getString("accessToken").toString()
         taxID = arguments?.getString("taxId").toString()
+        userEmail = arguments?.getString("userEmail").toString()
+
     }
 
 
@@ -105,13 +110,21 @@ class HomeFragment : Fragment() {
                             val success = type.response as CalculateTaxResponse
                             val taxPay:String = success.data
 
-
-                            coroutineScope.launch(Dispatchers.Main) {
+                            withContext(Dispatchers.Main){
                                 calculateTaxButton.dispose()
                                 dynamicTaxPayable.text = taxPay
                                 makePayment.visibility = View.VISIBLE
 
+
                             }
+
+//
+//                            coroutineScope.launch(Dispatchers.Main) {
+//                                calculateTaxButton.dispose()
+//                                dynamicTaxPayable.text = taxPay
+//                                makePayment.visibility = View.VISIBLE
+//
+//                            }
 
                         }
                         is ApiResult.NetworkError -> {
@@ -149,6 +162,17 @@ class HomeFragment : Fragment() {
             calculateTaxButton.startAnimation()
         }
 
+        makePayment.setOnClickListener {
+            val bundle = bundleOf(
+                "amount" to dynamicTaxPayable,
+                "userEmail" to userEmail,
+                "fullName" to fullName,
+                "tax_type" to "IRS"
+            )
+
+            view.findNavController().navigate(R.id.action_homeFragment_to_makePayment, bundle)
+        }
+
 
 
 
@@ -167,7 +191,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    fun calculateIncome(){
+    private fun calculateIncome(){
         val taxId = taxID
         val income = incomeTextView.text.toString().trim()
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ayoolamasha.paytaxappsdg.Home.HomeViewModel
 import com.ayoolamasha.paytaxappsdg.Login.LoginViewModel
+import com.ayoolamasha.paytaxappsdg.Payment.MakePaymentViewModel
 import com.ayoolamasha.paytaxappsdg.SignUp.SignUpViewModel
 import com.ayoolamasha.paytaxappsdg.UserData.UserDataRepository
 
@@ -38,6 +39,8 @@ class ViewModelFactory(application: Application) : ViewModelProvider.Factory {
             return LoginViewModel(application) as T
         }else if (modelClass == (HomeViewModel::class.java)){
             return HomeViewModel(application) as T
+        }else if (modelClass == (MakePaymentViewModel::class.java)){
+            return MakePaymentViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

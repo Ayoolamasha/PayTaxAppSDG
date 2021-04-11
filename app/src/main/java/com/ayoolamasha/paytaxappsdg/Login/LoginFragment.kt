@@ -95,7 +95,8 @@ class LoginFragment : Fragment() {
                             val bundle = bundleOf(
                                 "taxId" to success.loginResponseData.taxPayerId,
                                 "accessToken" to success.accessToken,
-                                "name" to fullName
+                                "name" to fullName,
+                                "userEmail" to success.loginResponseData.email
                             )
 //                            bundle.putString("userTaxId", success.loginResponseData.taxPayerId)
 //                            bundle.putString("userAccessToken", success.accessToken)
