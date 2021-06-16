@@ -14,11 +14,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiResult
-import com.ayoolamasha.paytaxappsdg.Home.HomeViewModel
 import com.ayoolamasha.paytaxappsdg.Models.CalculateTaxResponse
 import com.ayoolamasha.paytaxappsdg.Models.PaymentResponse
 import com.ayoolamasha.paytaxappsdg.R
-import com.ayoolamasha.paytaxappsdg.Utils.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -46,12 +44,14 @@ class MakePaymentFragment : Fragment() {
 
     private lateinit var reference:TextView
     private lateinit var back: Button
+    private lateinit var pay: Button
     private lateinit var authUrl:TextView
+    private lateinit var dynamicPayable:TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, ViewModelFactory(requireActivity().application))
-            .get(MakePaymentViewModel::class.java)
+//        viewModel = ViewModelProvider(this, ViewModelFactory(requireActivity().application))
+//            .get(MakePaymentViewModel::class.java)
 
 
         fullName = arguments?.getString("fullName").toString()
@@ -147,6 +147,15 @@ class MakePaymentFragment : Fragment() {
             }
         })
 
+        if (checkBox.isChecked){
+            payButton.visibility = View.VISIBLE
+
+        }else{
+            Toast.makeText(activity, "Click payment method", Toast.LENGTH_SHORT).show()
+        }
+
+
+        dynamicPayable.text = amountPayable
 
         payButton.setOnClickListener {
             makePayment()
@@ -159,6 +168,7 @@ class MakePaymentFragment : Fragment() {
     private fun init(view: View){
         checkBox = view.findViewById(R.id.checkbox)
         payButton = view.findViewById(R.id.PaymentButton)
+        dynamicPayable = view.findViewById(R.id.dynamicPayableAmount)
     }
 
     private fun makePayment(){

@@ -1,68 +1,55 @@
 package com.ayoolamasha.paytaxappsdg.SignUp
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiResult
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiStatusResult
+import com.ayoolamasha.paytaxappsdg.Utils.NetworkHelper
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
+import javax.inject.Inject
+
+@HiltViewModel
+class SignUpViewModel @Inject constructor(private val signUpRepository: SignUpRepository,
+                                              private val networkHelper: NetworkHelper
+): ViewModel() {
+
+//
+//    private val _mutableSignUp = MutableLiveData<Event<ApiStatusResult<Any>>>()
+//
+//    val mLiveSignUpResponse: LiveData<Event<ApiStatusResult<Any>>> get() = _mutableSignUp
+
+    private val _mutableSignUp = MutableLiveData<ApiStatusResult<Any>>()
+
+    val mLiveSignUpResponse: LiveData<ApiStatusResult<Any>> get() = _mutableSignUp
 
 
-class SignUpViewModel(application: Application) : AndroidViewModel(application){
-
-    /**
-     * This is the job for all coroutines started by this ViewModel.
-     *
-     * Cancelling this job will cancel all coroutines started by this ViewModel.
-     */
-    private val viewModelJob = SupervisorJob()
-
-    /**
-     * This is the main scope for all coroutines launched by MainViewModel.
-     *
-     * Since we pass viewModelJob, you can cancel all coroutines launched by uiScope by calling
-     * viewModelJob.cancel()
-     */
-    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
-
-
-    private lateinit var signUpRepository: SignUpRepository
-
-    var mLiveSignUpResponse: LiveData<ApiResult<Any>>
-
-    private val mMutableSignUpResponse: MutableLiveData<ApiResult<Any>>
-
-    init {
-        signUpRepository = SignUpRepository.getInstance(application)
-        mMutableSignUpResponse = MutableLiveData()
-        mLiveSignUpResponse = mMutableSignUpResponse
-    }
-
-    fun userSignUp(userFirstName: String, userLastName: String, userEmail: String,
-    userPhone: String, userPassword: String){
+    fun signUpUsersVM(userFirstName: String, userLastName: String, userEmail: String,
+                            userPhone: String, userPassword: String){
         viewModelScope.launch {
-            val signUpRequest = SignUpRequest(userFirstName, userLastName, userEmail, userPhone, userPassword)
-            val signUpResult = signUpRepository.makeSignUpRequest(signUpRequest)
-            mMutableSignUpResponse.postValue(signUpResult)
+            //_mutableSignUp.postValue(ApiStatusResult.loading(null))
+            if (networkHelper.isNetworkConnected()){
+                val signUpRequest = SignUpRequest(userFirstName, userLastName, userEmail, userPhone, userPassword)
+                signUpRepository.signUpUser(signUpRequest).let {
+                    if (it.isSuccessful){
+                        if (it.body() != null && it.code() == 200){
+                            val success = it.body()
+                            _mutableSignUp.postValue(ApiStatusResult.successResult(success as SignUpResponse))
+                        }else if (it.code() != 201){
+                            _mutableSignUp.postValue(ApiStatusResult.errorResult(it.errorBody().toString(), null))
 
+                        }
+                    }else _mutableSignUp.postValue(ApiStatusResult.failureResult(it.message().toString(), null))
+                }
+
+            }else _mutableSignUp.postValue(ApiStatusResult.networkError(true, "No internet connection"))
         }
+
     }
 
-
-    /**
-     * Cancel all coroutines when the ViewModel is cleared
-     */
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel()
+        viewModelScope.cancel()
     }
-
-
-
-
 }
+

@@ -3,84 +3,70 @@ package com.ayoolamasha.paytaxappsdg.Login
 import android.app.Application
 import androidx.lifecycle.*
 import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiResult
+import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiStatusResult
 import com.ayoolamasha.paytaxappsdg.ApiServices.ApiServicesInterface
+import com.ayoolamasha.paytaxappsdg.SignUp.SignUpRequest
+import com.ayoolamasha.paytaxappsdg.SignUp.SignUpResponse
 import com.ayoolamasha.paytaxappsdg.UserData.UserDataPojo
 import com.ayoolamasha.paytaxappsdg.UserData.UserDataRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import com.ayoolamasha.paytaxappsdg.Utils.NetworkHelper
+import com.ayoolamasha.paytaxappsdg.Utils.UserSharedPreference
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
+import javax.inject.Inject
 
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository,
+                                         private val networkHelper: NetworkHelper,
+                                         private val userDataRepository: UserDataRepository, private val userSharedPreference: UserSharedPreference ) : ViewModel(){
+
+    // Using LiveData and caching what allWords returns has several benefits:
+    // - We can put an observer on the data (instead of polling for changes) and only update the
+    //   the UI when the data actually changes.
+    // - Repository is completely separated from the UI through the ViewModel.
+    val allWords: LiveData<List<UserDataPojo>> = userDataRepository.allUserData.asLiveData()
 
     /**
-     * This is the job for all coroutines started by this ViewModel.
-     *
-     * Cancelling this job will cancel all coroutines started by this ViewModel.
+     * Launching a new coroutine to insert the data in a non-blocking way
      */
-    private val viewModelJob = SupervisorJob()
-
-    /**
-     * This is the main scope for all coroutines launched by MainViewModel.
-     *
-     * Since we pass viewModelJob, you can cancel all coroutines launched by uiScope by calling
-     * viewModelJob.cancel()
-     */
-    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
-
-    private lateinit var loginRepository: LoginRepository
-   // private lateinit var userDataRepository: UserDataRepository
-
-    //val allUserDataPojo: LiveData<List<UserDataPojo>> = repository.allUserData.asLiveData()
-
-//    fun saveUserDataViewModel(userDataPojo: UserDataPojo) = viewModelScope.launch {
-//        repository.saveUserDataRepository(userDataPojo)
-//
-//    }
-
-
-    var mLiveLoginResponse: LiveData<ApiResult<Any>>
-    private var _mMutableLoginResponse: MutableLiveData<ApiResult<Any>>
-
-    init {
-        loginRepository = LoginRepository.getInstance(application)
-        _mMutableLoginResponse = MutableLiveData()
-        mLiveLoginResponse = _mMutableLoginResponse
-        //userDataRepository = UserDataRepository()
-
+    fun insertUserDataViewModel(userDataPojo: UserDataPojo) = viewModelScope.launch {
+        userDataRepository.saveUserDataHelper(userDataPojo)
+        userSharedPreference.setIsLoggedIn(true)
     }
 
+    fun clearBeforeInsert(userDataPojo: UserDataPojo) = viewModelScope.launch {
+        userDataRepository.clearBeforeInsert(userDataPojo)
+        userSharedPreference.setIsLoggedIn(true)
+    }
 
-    fun userLogin(userTaxId: String, userPassword:String){
+    private val _mutableLogin = MutableLiveData<ApiStatusResult<Any>>()
+    val mLoginRequestResponse : LiveData<ApiStatusResult<Any>> get()  =  _mutableLogin
+
+
+    fun loginUsersVM(userTaxID: String, userPassword: String){
         viewModelScope.launch {
-            val loginRequest = LoginRequest(userTaxId, userPassword)
-            val loginResult = loginRepository.makeLoginRequest(loginRequest)
-            _mMutableLoginResponse.postValue(loginResult)
+            if (networkHelper.isNetworkConnected()){
+                val loginRequest = LoginRequest(userTaxID, userPassword)
+                loginRepository.loginUser(loginRequest).let {
+                    if (it.isSuccessful){
+                        if (it.body() != null && it.code() == 200){
+                            val success = it.body()
+                            _mutableLogin.postValue(ApiStatusResult.successResult(success as LoginRequestResponse))
+                        }else if (it.code() != 201){
+                            _mutableLogin.postValue(ApiStatusResult.errorResult(it.errorBody().toString(), null))
+
+                        }
+                    }else _mutableLogin.postValue(ApiStatusResult.failureResult(it.message().toString(), null))
+                }
+
+            }else _mutableLogin.postValue(ApiStatusResult.networkError(true, "No internet connection"))
         }
+
     }
 
-//    fun saveUserViewModel(userDataPojo: UserDataPojo){
-//        userDataRepository.saveUserDataRepository(userDataPojo)
-//    }
-
-//
-//        class LoginViewModelFactory(private val application: UserDataRepository, private val repository: UserDataRepository) : ViewModelProvider.Factory {
-//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-//                @Suppress("UNCHECKED_CAST")
-//                return LoginViewModel(application, repository) as T
-//            }
-//            throw IllegalArgumentException("Unknown ViewModel class")
-//        }
-//}
-
-
-    /**
-     * Cancel all coroutines when the ViewModel is cleared
-     */
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel()
+        viewModelScope.cancel()
     }
+
 }

@@ -1,25 +1,31 @@
 package com.ayoolamasha.paytaxappsdg.Utils
 
-import android.content.Context
+
 import android.content.SharedPreferences
-import java.io.IOException
-import java.security.GeneralSecurityException
+import androidx.core.content.edit
+import javax.inject.Inject
 
-class UserSharedPreference {
+private const val LOGGED_IN = "LOGGED_IN"
+private const val AUTH_TOKEN = "AUTH_TOKEN"
+private const val USER_NAME = "USER_NAME"
 
-    private lateinit var context: Context
-    private var instance: UserSharedPreference?=null
+class UserSharedPreference @Inject constructor(private val preferences: SharedPreferences) {
 
-    companion object{
-        val sharedPreference: SharedPreferences? = null
-        val userSharedPreference: String = "user_shared_preference"
-        var instance: UserSharedPreference? = null
-
-        //val instance: UserSharedPreference?=null
-
-        @Throws(GeneralSecurityException::class, IOException::class)
-        fun getInstance(context: Context?): UserSharedPreference? {
-            return instance ?: UserSharedPreference()
-        }
+    fun setIsLoggedIn(enabled:Boolean){
+        preferences.edit{putBoolean(LOGGED_IN, enabled)}
     }
+
+    fun setAuthToken(authToken:String){
+        preferences.edit{putString(AUTH_TOKEN, authToken)}
+    }
+
+    fun setLoggedInUser(userName:String){
+        preferences.edit{putString(USER_NAME, userName)}
+    }
+
+    fun isUserLoggedIn() = preferences.getBoolean(LOGGED_IN, false)
+    fun getAuthToken() = preferences.getString(AUTH_TOKEN, null)
+    fun getLoggedInUser() = preferences.getString(USER_NAME, null)
+    fun clear()= preferences.edit().clear().apply()
+
 }

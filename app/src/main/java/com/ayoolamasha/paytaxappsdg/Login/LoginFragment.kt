@@ -10,59 +10,32 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiResult
+import com.ayoolamasha.paytaxappsdg.ApiCallBacks.STATUS
 import com.ayoolamasha.paytaxappsdg.BaseApplication
 import com.ayoolamasha.paytaxappsdg.R
 import com.ayoolamasha.paytaxappsdg.SignUp.SignUpErrorPojo
 import com.ayoolamasha.paytaxappsdg.SignUp.SignUpResponse
 import com.ayoolamasha.paytaxappsdg.UserData.UserDataPojo
 import com.ayoolamasha.paytaxappsdg.UserData.UserDataRepository
-import com.ayoolamasha.paytaxappsdg.Utils.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import timber.log.Timber
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = LoginFragment()
-    }
-
-
-
-
-    private lateinit var viewModel: LoginViewModel
+    private val loginViewModel: LoginViewModel by viewModels()
     private lateinit var taxId: TextInputEditText
     private lateinit var password:TextInputEditText
     private lateinit var login:CircularProgressButton
-    lateinit var userDataRepository: UserDataRepository
 
-
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
-//    private val viewModel: LoginViewModel by viewModels {
-//        LoginViewModel.LoginViewModelFactory((context as BaseApplication).repository)
-//    }
-
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, ViewModelFactory(requireActivity().application))
-            .get(LoginViewModel::class.java)
-
-
-
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -75,81 +48,65 @@ class LoginFragment : Fragment() {
             view.findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
 
-//        view.findViewById<Button>(R.id.login).setOnClickListener {
-//            view.findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-//        }
+
+        loginViewModel.mLoginRequestResponse.observe(requireActivity(), {
+            run {
+                lifecycleScope.launch {
+                    when(it.STATUS){
+                        STATUS.SUCCESS -> {
+                            login.dispose()
+                            it.data?.let {
+                                response -> response as LoginRequestResponse
+                                val fullName:String = response.loginResponseData.firstName + response.loginResponseData.lastName
+                                val bundle = bundleOf(
+                                "taxId" to response.loginResponseData.taxPayerId,
+                                "accessToken" to response.accessToken,
+                                "name" to fullName,
+                                "userEmail" to response.loginResponseData.email
+                            )
+                            bundle.putString("userTaxId", response.loginResponseData.taxPayerId)
+                            //bundle.putString("userAccessToken", response.accessToken)
+                            bundle.putString("userName", fullName)
+
+
+                                val userDataPojo = UserDataPojo(null, response.accessToken,
+                                    response.loginResponseData._id, response.loginResponseData.firstName,
+                                    response.loginResponseData.lastName, response.loginResponseData.email,
+                                    response.loginResponseData.phone, response.loginResponseData.password, response.loginResponseData.taxPayerId)
+                                loginViewModel.insertUserDataViewModel(userDataPojo)
+
+
+                                view.findNavController().navigate(R.id.action_loginFragment_to_homeFragment, bundle)
+
+                                Snackbar.make(view, "Login Successful", Snackbar.LENGTH_SHORT).setAnimationMode(Snackbar.ANIMATION_MODE_FADE).show()
+
+                            }
+                        }
+                        STATUS.LOADING -> {
+
+                            Snackbar.make(view, "Error Logging", Snackbar.LENGTH_SHORT).setAnimationMode(Snackbar.ANIMATION_MODE_FADE).show()
+                        }
+                        STATUS.ERROR-> {
+                            //Handle Error
+                            Snackbar.make(view, "Invalid Credentials", Snackbar.LENGTH_SHORT).setAnimationMode(Snackbar.ANIMATION_MODE_FADE).show()
+                        }
+                        else ->  Snackbar.make(view, "Check Your Network", Snackbar.LENGTH_SHORT).setAnimationMode(Snackbar.ANIMATION_MODE_FADE).show()
+                    }
+                }
+            }
+        })
+
 
         login.setOnClickListener {
             loginRequest()
             login.startAnimation()
         }
 
-        viewModel.mLiveLoginResponse.observe(requireActivity(), { type ->
-            run {
-                coroutineScope.launch {
-                    when (type) {
-                        is ApiResult.Success -> {
-                            val success = type.response as LoginRequestResponse
-                            //Timber.tag("success").d(success.loginResponseData.taxPayerId)
-                            val fullName:String = success.loginResponseData.firstName + success.loginResponseData.lastName
-                            val bundle = bundleOf(
-                                "taxId" to success.loginResponseData.taxPayerId,
-                                "accessToken" to success.accessToken,
-                                "name" to fullName,
-                                "userEmail" to success.loginResponseData.email
-                            )
-//                            bundle.putString("userTaxId", success.loginResponseData.taxPayerId)
-//                            bundle.putString("userAccessToken", success.accessToken)
-//                            bundle.putString("userName", fullName)
-
-//                            val userDataPojo = UserDataPojo(success.accessToken,
-//                                success.loginResponseData._id, success.loginResponseData.firstName,
-//                                success.loginResponseData.lastName, success.loginResponseData.email,
-//                            success.loginResponseData.phone, success.loginResponseData.password, success.loginResponseData.taxPayerId)
-//                            viewModel.saveUserViewModel(userDataPojo)
-                            view.findNavController().navigate(R.id.action_loginFragment_to_homeFragment, bundle)
-                        }
-                        is ApiResult.NetworkError -> {
-                            login.dispose()
-                            Snackbar.make(
-                                view,
-                                "Check your Network Connection",
-                                Snackbar.LENGTH_SHORT
-                            ).setAnimationMode(Snackbar.ANIMATION_MODE_FADE).show()
-                        }
-                        is ApiResult.Failure -> {
-                            login.dispose()
-                            val error: SignUpErrorPojo = type as SignUpErrorPojo
-                            Timber.tag("Failure").d(error.message)
-                            Snackbar.make(
-                                view,
-                                error.message!!,
-                                Snackbar.LENGTH_SHORT
-                            ).setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
-                        }
-                        is ApiResult.Exception -> {
-                            login.dispose()
-                            Timber.tag("Exception").d(type.t)
-                            type.t.message?.let {
-                                Snackbar.make(view, it, Snackbar.LENGTH_SHORT)
-                                    .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
-                            }
-                        }
-                        else -> ApiResult.NetworkError(true)
-                    }
-                }
-            }
-
-        })
 
         return  view
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-//        // TODO: Use the ViewModel
-//    }
+
 
     private fun init(view:View){
         taxId = view.findViewById(R.id.inputTaxId)
@@ -164,8 +121,15 @@ class LoginFragment : Fragment() {
         if (userTaxId.isEmpty() || userPassword.isEmpty()){
             Toast.makeText(activity, "Fill all Fields" , Toast.LENGTH_SHORT).show()
         }else{
-            viewModel.userLogin(userTaxId, userPassword)
+            loginViewModel.loginUsersVM(userTaxId, userPassword)
         }
+    }
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycleScope.cancel()
     }
 
 }

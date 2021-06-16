@@ -7,24 +7,17 @@ import com.ayoolamasha.paytaxappsdg.SignUp.SignUpRequest
 import com.ayoolamasha.paytaxappsdg.SignUp.SignUpResponse
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.POST
 
-interface ApiServicesInterface {
-    @POST("/api/v2/users/register")
+interface ApiServicesInterfaceHelper {
     suspend fun signUp(@Body signUpRequest: SignUpRequest): Response<SignUpResponse>
 
-    @POST("/api/v2/users/login")
     suspend fun login(@Body loginRequest: LoginRequest): Response<LoginRequestResponse>
 
-    @GET("/api/v2/payments/tax_types")
-    suspend fun getTaxTypes(@Header("Bearer Token") accessToken:String): Response<GetTaxTypesResponse>
+    suspend fun getTaxTypes(@Header("Authorization") accessToken:String): Response<GetTaxTypesResponse>
 
-    @POST("/api/v2/payments/payment_income_tax")
     suspend fun calculateTaxTypes(@Body calculateTaxRequest: CalculateTaxRequest): Response<CalculateTaxResponse>
 
-    @POST("/api/v2/gateways/pay")
-    suspend fun makePaymentService(@Header("Bearer Token") accessToken:String,  @Body paymentRequest: PaymentRequest): Response<PaymentResponse>
+    suspend fun makePaymentService(@Header("Authorization") accessToken:String,  @Body paymentRequest: PaymentRequest): Response<PaymentResponse>
 
 }
