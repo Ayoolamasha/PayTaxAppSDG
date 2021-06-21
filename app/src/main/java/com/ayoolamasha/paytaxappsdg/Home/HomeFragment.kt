@@ -1,7 +1,6 @@
 package com.ayoolamasha.paytaxappsdg.Home
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,34 +11,28 @@ import android.widget.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-import com.ayoolamasha.paytaxappsdg.ApiCallBacks.ApiResult
-import com.ayoolamasha.paytaxappsdg.BaseApplication
-import com.ayoolamasha.paytaxappsdg.Models.CalculateTaxResponse
-import com.ayoolamasha.paytaxappsdg.Models.GetDataTypesResponse
+import com.ayoolamasha.paytaxappsdg.Login.LoginViewModel
 import com.ayoolamasha.paytaxappsdg.R
-import com.ayoolamasha.paytaxappsdg.SignUp.SignUpErrorPojo
 import com.ayoolamasha.paytaxappsdg.UserData.UserDataPojo
-import com.ayoolamasha.paytaxappsdg.Utils.ViewModelFactory
-import com.google.android.material.snackbar.Snackbar
+import com.ayoolamasha.paytaxappsdg.UserData.UserDataRoomDatabase
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
+
 
     companion object {
         fun newInstance() = HomeFragment()
     }
 
+    private val homeViewModel: HomeViewModel by viewModels()
 
-    lateinit var userDataPojo: UserDataPojo
-
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
-
-    private lateinit var homeViewModel: HomeViewModel
 
     private lateinit var incomeTextView: TextInputEditText
     private lateinit var selectTaxSpinner: Spinner
@@ -59,19 +52,19 @@ class HomeFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
 
     lateinit var fullName:String
-    lateinit var accessToken:String
+
     lateinit var taxID: String
     lateinit var userEmail: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        homeViewModel = ViewModelProvider(this, ViewModelFactory(requireActivity().application))
-            .get(HomeViewModel::class.java)
+//        homeViewModel = ViewModelProvider(this, ViewModelFactory(requireActivity().application))
+//            .get(HomeViewModel::class.java)
 
 
         fullName = arguments?.getString("name").toString()
-        accessToken = arguments?.getString("accessToken").toString()
+        //accessToken = arguments?.getString("accessToken").toString()
         taxID = arguments?.getString("taxId").toString()
         userEmail = arguments?.getString("userEmail").toString()
 
@@ -89,7 +82,19 @@ class HomeFragment : Fragment() {
         init(view)
 
 
-        Toast.makeText(context, "User Name is $fullName", Toast.LENGTH_LONG).show()
+//        homeViewModel.viewModelScope.launch {
+//            homeViewModel.getAllLiveUserPojo().collect{
+//                dynamicName.text =
+//            }
+//        }
+
+
+
+
+
+
+//        Toast.makeText(context, "User Name is:  "+ homeViewModel.getUserTaxPayerId(accessTokenss).toString()
+//            , Toast.LENGTH_LONG).show()
         dynamicName.text = fullName
         dynamicTaxId.text = taxID
 
@@ -102,69 +107,70 @@ class HomeFragment : Fragment() {
 
 
 
-        homeViewModel.mLiveGetTaxTypeResponse.observe(requireActivity(), {type ->
-            run {
-                coroutineScope.launch {
-                    when(type){
-                        is ApiResult.Success ->{
-                            val success = type.response as CalculateTaxResponse
-                            val taxPay:String = success.data
-
-                            withContext(Dispatchers.Main){
-                                calculateTaxButton.dispose()
-                                dynamicTaxPayable.text = taxPay
-                                makePayment.visibility = View.VISIBLE
-
-
-                            }
-
+//        homeViewModel.mLiveGetTaxTypeResponse.observe(requireActivity(), {type ->
+//            run {
+//                coroutineScope.launch {
+//                    when(type){
+//                        is ApiResult.Success ->{
+//                            val success = type.response as CalculateTaxResponse
+//                            val taxPay:String = success.data
 //
-//                            coroutineScope.launch(Dispatchers.Main) {
+//                            withContext(Dispatchers.Main){
 //                                calculateTaxButton.dispose()
 //                                dynamicTaxPayable.text = taxPay
 //                                makePayment.visibility = View.VISIBLE
 //
+//
 //                            }
-
-                        }
-                        is ApiResult.NetworkError -> {
-                            Snackbar.make(
-                                view,
-                                "Check your Network Connection",
-                                Snackbar.LENGTH_SHORT
-                            ).setAnimationMode(Snackbar.ANIMATION_MODE_FADE).show()
-                        }
-                        is ApiResult.Failure -> {
-                            val error: CalculateTaxResponse = type.response as CalculateTaxResponse
-                            Timber.tag("Failure").d(error.message)
-                            Snackbar.make(
-                                view,
-                                error.message!!,
-                                Snackbar.LENGTH_SHORT
-                            ).setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
-                        }
-                        is ApiResult.Exception -> {
-                            Timber.tag("Exception").d(type.t)
-                            type.t.message?.let {
-                                Snackbar.make(view, it, Snackbar.LENGTH_SHORT)
-                                    .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
-                            }
-                        }
-                        else -> ApiResult.NetworkError(true)
-                    }
-
-                }
-            }
-        })
+//
+////
+////                            coroutineScope.launch(Dispatchers.Main) {
+////                                calculateTaxButton.dispose()
+////                                dynamicTaxPayable.text = taxPay
+////                                makePayment.visibility = View.VISIBLE
+////
+////                            }
+//
+//                        }
+//                        is ApiResult.NetworkError -> {
+//                            Snackbar.make(
+//                                view,
+//                                "Check your Network Connection",
+//                                Snackbar.LENGTH_SHORT
+//                            ).setAnimationMode(Snackbar.ANIMATION_MODE_FADE).show()
+//                        }
+//                        is ApiResult.Failure -> {
+//                            val error: CalculateTaxResponse = type.response as CalculateTaxResponse
+//                            Timber.tag("Failure").d(error.message)
+//                            Snackbar.make(
+//                                view,
+//                                error.message,
+//                                Snackbar.LENGTH_SHORT
+//                            ).setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
+//                        }
+//                        is ApiResult.Exception -> {
+//                            Timber.tag("Exception").d(type.t)
+//                            type.t.message?.let {
+//                                Snackbar.make(view, it, Snackbar.LENGTH_SHORT)
+//                                    .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
+//                            }
+//                        }
+//                        else -> ApiResult.NetworkError(true)
+//                    }
+//
+//                }
+//            }
+//        })
 
         calculateTaxButton.setOnClickListener {
-            calculateIncome()
+            //calculateIncome()
             calculateTaxButton.startAnimation()
         }
 
         makePayment.setOnClickListener {
+            val payable:String = dynamicTaxPayable.text.toString()
             val bundle = bundleOf(
-                "amount" to dynamicTaxPayable,
+                "amount" to payable,
                 "userEmail" to userEmail,
                 "fullName" to fullName,
                 "tax_type" to "IRS"
@@ -190,19 +196,19 @@ class HomeFragment : Fragment() {
         progressBar = view.findViewById(R.id.calculateLoading)
 
     }
-
-    private fun calculateIncome(){
-        val taxId = taxID
-        val income = incomeTextView.text.toString().trim()
-
-        if (income.isEmpty()){
-            Toast.makeText(activity, "Input Income" , Toast.LENGTH_SHORT).show()
-            calculateTaxButton.dispose()
-            progressBar.visibility = View.INVISIBLE
-        }else{
-            homeViewModel.makeCalculationsViewModel(taxId, income)
-        }
-    }
+//
+//    private fun calculateIncome(){
+//        val taxId = taxID
+//        val income = incomeTextView.text.toString().trim()
+//
+//        if (income.isEmpty()){
+//            Toast.makeText(activity, "Input Income" , Toast.LENGTH_SHORT).show()
+//            calculateTaxButton.dispose()
+//            progressBar.visibility = View.INVISIBLE
+//        }else{
+//            homeViewModel.makeCalculationsViewModel(taxId, income)
+//        }
+//    }
 
 
 }

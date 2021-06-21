@@ -1,7 +1,16 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+
+apply plugin:  'com.android.application'
+apply plugin:  'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+kapt {
+    correctErrorTypes true
+    generateStubs = true
 }
+
 
 android {
     compileSdkVersion 30
@@ -16,6 +25,18 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
+                        "room.incremental":"true",
+                        "room.expandProjection":"true"]
+            }
+        }
+
+
+        buildConfigField 'String', 'BASE_URL', "\"https://paytax-app.herokuapp.com/\""
     }
 
     buildTypes {
@@ -48,19 +69,51 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     // Room components
-    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    //implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    //implementation "android.arch.persistence.room:runtime:1.1.1"
+    //kapt "android.arch.persistence.room:compiler:1.1.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.4'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
-    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
-    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    // Feature module Support
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+
+    // Testing Navigation
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+    //annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    //androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+
+    def room_version = "2.3.0"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
+
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
+
+
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
+
+
+//    implementation "com.google.dagger:hilt-android:$hilt_version"
+//    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+//    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
+//    kapt 'androidx.hilt:hilt-compiler:1.0.0-beta01'
+
+    //Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+    kapt "androidx.hilt:hilt-compiler:1.0.0-beta01"
 
     //RETROFIT
     implementation "io.reactivex.rxjava3:rxjava:3.0.7"

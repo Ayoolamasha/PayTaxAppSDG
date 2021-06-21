@@ -2,51 +2,28 @@ package com.ayoolamasha.paytaxappsdg.UserData
 
 import android.app.Application
 import android.content.Context
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
+class UserDataRepository @Inject constructor (private val userDao: UserDao): UserDaoHelper {
 
-class UserDataRepository {
+    // Room executes all queries on a separate thread.
+    // Observed Flow will notify the observer when the data has changed.
+    val allUserData: Flow<List<UserDataPojo>> = userDao.getAllUserData()
 
-    private lateinit var userDao: UserDao
-    private lateinit var context: Context
-
-    //val allUserData: Flow<List<UserDataPojo>> = userDao.getAllUserData()
-    lateinit var allUserData: LiveData<List<UserDataPojo>>
-
-
-//
-//    @Suppress("RedundantSuspendModifier")
-//    @WorkerThread
-//    suspend fun saveUserDataRepository(userDataPojo: UserDataPojo){
-//        userDao.saveUserData(userDataPojo)
-//    }
-
-    fun UserDataRepository(application:Application){
-        val userDataRoomDatabase = UserDataRoomDatabase.getInstance(application)
-        if (userDataRoomDatabase != null) {
-            userDao = userDataRoomDatabase.userDao()
-            allUserData = userDao.getAllUserData()
-
-
-    }    }
-
-
-
-
-
-
-    fun saveUserDataRepository(userDataPojo: UserDataPojo){
-        UserDataRoomDatabase.databaseWriterExecutor.execute {
-            userDao.saveUserData(userDataPojo)
-
-        }
-
- }
-
-
-
-
-
+    // By default Room runs suspend queries off the main thread, therefore, we don't need to
+    // implement anything else to ensure we're not doing long running database work
+    // off the main thread.
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+     override suspend fun saveUserDataHelper(userDataPojo: UserDataPojo) = userDao.saveUserData(userDataPojo)
+    override suspend fun getAllUserData(): Flow<List<UserDataPojo>> = userDao.getAllUserData()
+    override fun getTaxPayerId(accessToken:String): UserDataPojo = userDao.getTaxPayerId(accessToken)
+    override suspend fun clearBeforeInsert(userDataPojo: UserDataPojo) = userDao.clearBeforeInsert(userDataPojo)
+    //suspend fun insertUserRepository(userDataPojo: UserDataPojo) = userDaoHelper.saveUserDataHelper(userDataPojo)
+    //suspend fun saveUserDataHelper(userDataPojo: UserDataPojo) = userDao.saveUserData(userDataPojo)
 
 
 

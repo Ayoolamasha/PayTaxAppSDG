@@ -138,7 +138,6 @@
         android:layout_height="@dimen/button_height_make_payment"
         android:background="@drawable/round_button_brown"
         android:text="@string/payment"
-        android:visibility="invisible"
         android:textColor="@color/brown_text_color"
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

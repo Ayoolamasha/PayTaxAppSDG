@@ -1,42 +1,28 @@
 package com.ayoolamasha.paytaxappsdg.UserData
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface UserDao {
-
-//    @Query("SELECT * FROM user_data")
-//    fun getAllUserData(): Flow<List<UserDataPojo>>
+abstract class UserDao {
 
     @Query("SELECT * FROM user_data")
-    fun getAllUserData(): LiveData<List<UserDataPojo>>
-
-
-//    @Insert(onConflict = OnConflictStrategy.IGNORE)
-//    suspend fun saveUserData(userDataPojo: UserDataPojo)
+    abstract fun getAllUserData(): Flow<List<UserDataPojo>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun saveUserData(userDataPojo: UserDataPojo)
+    abstract suspend fun saveUserData(userDataPojo: UserDataPojo)
+
+    @Query("DELETE FROM user_data")
+    abstract suspend fun deleteAll()
+
+    @Query("SELECT * FROM user_data WHERE accessToken = :accessToken")
+    abstract fun getTaxPayerId(accessToken: String?): UserDataPojo
 
 
-//    private val quoteList = mutableListOf<UserDataPojo>()
-//    private val quotes = MutableLiveData<List<UserDataPojo>>()
-//
-//    init {
-//        quotes.value = quoteList
-//    }
-//
-//    fun addQuote(quote: Quote) {
-//        quoteList.add(quote)
-//        quotes.value = quoteList
-//    }
-//
-//    fun getQuotes() = quotes as LiveData<List<Quote>>
-
+    @Transaction
+    open suspend fun clearBeforeInsert(userDataPojo: UserDataPojo){
+        deleteAll()
+        saveUserData(userDataPojo)
+    }
 }
